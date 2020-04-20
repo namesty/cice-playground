@@ -5,15 +5,14 @@ import { bind } from '../utils/bind'
 
 const cx = bind(styles)
 
-type Payload = {action: 'create', text: string} | {action: 'complete', id: number}
+type Payload = {type: 'create', id: number, text: string} | {type: 'complete', id: number}
 
 export const App: React.FC = () => {
 
   const reducer = (state: Todo[], payload: Payload): Todo[] => {
-    switch(payload.action) {
+    switch(payload.type) {
       case 'create': {
-        const newTodo: Todo = { id: Math.floor(Math.random() * 1000), text: payload.text, completed: false }
-        console.log(state)
+        const newTodo: Todo = { id: payload.id, text: payload.text, completed: false }
         return [...state, newTodo]
       }
 
@@ -41,7 +40,7 @@ export const App: React.FC = () => {
     <main>
       <ul>
         {todos.map(todo => (
-          <li onClick={() => dispatch({action: 'complete', id: todo.id})} className={cx({ completed: todo.completed })}>
+          <li onClick={() => dispatch({type: 'complete', id: todo.id})} className={cx({ completed: todo.completed })}>
             {todo.text}
           </li>
         ))}
@@ -49,7 +48,7 @@ export const App: React.FC = () => {
       <form
         onSubmit={event => {
           event.preventDefault()
-          dispatch({action:'create', text: todoText})
+          dispatch({type:'create', id: Math.floor(Math.random() * 1000), text: todoText})
           clearTodo()
         }}
       >
