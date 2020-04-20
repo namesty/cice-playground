@@ -11,12 +11,11 @@ export const App: React.FC = () => {
 
   const reducer = (state: Todo[], payload: Payload): Todo[] => {
     switch(payload.type) {
-      case 'create': {
+      case 'create':
         const newTodo: Todo = { id: payload.id, text: payload.text, completed: false }
         return [...state, newTodo]
-      }
 
-      case 'complete': {
+      case 'complete':
         return state.map(todo => {
           if(todo.id === payload.id) {
             return {
@@ -25,8 +24,8 @@ export const App: React.FC = () => {
             }
           }
           return todo
-        })
-      }
+        }
+      )
     }
   }
 
