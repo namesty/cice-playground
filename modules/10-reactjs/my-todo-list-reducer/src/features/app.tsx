@@ -12,7 +12,8 @@ export const App: React.FC = () => {
   const reducer = (state: Todo[], payload: Payload): Todo[] => {
     switch(payload.action) {
       case 'create': {
-        const newTodo: Todo = { id: Math.floor(Math.random() * 1000), text: todoText, completed: false }
+        const newTodo: Todo = { id: Math.floor(Math.random() * 1000), text: payload.text, completed: false }
+        console.log(state)
         return [...state, newTodo]
       }
 
@@ -35,8 +36,6 @@ export const App: React.FC = () => {
   }
 
   const [todos, dispatch] = useReducer(reducer, [])
-
-
   const [todoText, setTodoText] = useState('')
   const isTodoDuplicated = todos.map(todo => todo.text).includes(todoText)
 
