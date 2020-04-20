@@ -1,28 +1,27 @@
-import { EmailSpanishGreeter } from './email-spanish-greeter'
+import { Emailer, EmailSpanishGreeter } from './email-spanish-greeter'
 import { SpanishGreeter } from './spanish-greeter'
+import { anything, capture, deepEqual, instance, mock, verify, when } from 'ts-mockito'
 
 describe('EmailSpanishGreeter', () => {
-  it('should get the greeting', () => {
-    const spanishGreeter: SpanishGreeter = {
-      hello: jest.fn().mockReturnValue('Hola'),
-    }
-    const sendEmail = jest.fn()
-    const emailSpanishGreeter = new EmailSpanishGreeter(spanishGreeter, sendEmail)
+  it('should say greeting', () => {
+    const spanishGreeter = mock(SpanishGreeter)
+    const emailer = mock(Emailer)
+    when(spanishGreeter.hello()).thenReturn('Hola')
+    const emailSpanishGreeter = new EmailSpanishGreeter(instance(spanishGreeter), instance(emailer))
 
     const actual = emailSpanishGreeter.hello()
 
     expect(actual).toBe('Hola')
   })
 
-  it('should send email with the greeting', () => {
-    const spanishGreeter: SpanishGreeter = {
-      hello: jest.fn().mockReturnValue('Hola'),
-    }
-    const sendEmail = jest.fn()
-    const emailSpanishGreeter = new EmailSpanishGreeter(spanishGreeter, sendEmail)
+  it('should send greeting email', () => {
+    const spanishGreeter = mock(SpanishGreeter)
+    const emailer = mock(Emailer)
+    when(spanishGreeter.hello()).thenReturn('Hola')
+    const emailSpanishGreeter = new EmailSpanishGreeter(instance(spanishGreeter), instance(emailer))
 
     emailSpanishGreeter.hello()
 
-    expect(sendEmail).toHaveBeenCalledWith('Hola')
+    verify(emailer.sendEmail(deepEqual({ body: 'Hola' }))).once()
   })
 })

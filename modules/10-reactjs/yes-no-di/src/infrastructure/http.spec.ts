@@ -1,44 +1,57 @@
 import { Http } from './http'
 
 describe('Http', () => {
-  it('should make a get request', async () => {
+  it('should get', async () => {
     const { fetcher, http } = setup()
+    fetcher.mockResolvedValue({ json: jest.fn().mockResolvedValue(42) })
 
-    await http.get('foo')
+    const actual = await http.get('/foo/bar')
 
-    expect(fetcher).toHaveBeenCalledWith('foo')
+    expect(actual).toBe(42)
   })
 
-  it('should make a post request', async () => {
+  it('should post', async () => {
     const { fetcher, http } = setup()
+    fetcher.mockResolvedValue({ json: jest.fn().mockResolvedValue(42) })
 
-    await http.post('foo', { bar: 'baz' })
+    await http.post('/foo/bar', { foo: 'bar' })
 
-    expect(fetcher).toHaveBeenCalledWith('foo', { body: '{"bar":"baz"}', method: 'POST' })
+    expect(fetcher).toHaveBeenCalledWith('/foo/bar', {
+      method: 'POST',
+      body: '{"foo":"bar"}',
+    })
   })
 
-  it('should make a put request', async () => {
+  it('should put', async () => {
     const { fetcher, http } = setup()
+    fetcher.mockResolvedValue({ json: jest.fn().mockResolvedValue(42) })
 
-    await http.put('foo', { bar: 'baz' })
+    await http.put('/foo/bar', { foo: 'bar' })
 
-    expect(fetcher).toHaveBeenCalledWith('foo', { body: '{"bar":"baz"}', method: 'PUT' })
+    expect(fetcher).toHaveBeenCalledWith('/foo/bar', {
+      method: 'PUT',
+      body: '{"foo":"bar"}',
+    })
   })
 
-  it('should make a delete request', async () => {
+  it('should delete', async () => {
     const { fetcher, http } = setup()
+    fetcher.mockResolvedValue({ json: jest.fn().mockResolvedValue(42) })
 
-    await http.delete('foo')
+    await http.delete('/foo/bar')
 
-    expect(fetcher).toHaveBeenCalledWith('foo', { method: 'DELETE' })
+    expect(fetcher).toHaveBeenCalledWith('/foo/bar', {
+      method: 'DELETE',
+    })
   })
 })
 
 function setup() {
   const fetcher = jest.fn()
-  fetcher.mockImplementation(() => Promise.resolve({ json: () => Promise.resolve() }))
+  const http = new Http(fetcher)
+
   return {
     fetcher,
-    http: new Http(fetcher)
+    http,
   }
 }
