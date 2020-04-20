@@ -18,7 +18,7 @@ export const App: React.FC = () => {
       }
 
       case 'complete': {
-        state.map(todo => {
+        return state.map(todo => {
           if(todo.id === payload.id) {
             return {
               ...todo,
@@ -27,10 +27,6 @@ export const App: React.FC = () => {
           }
           return todo
         })
-      }
-
-      default: {
-        throw new Error(`Accion '${payload.action}' no soportada`)
       }
     }
   }
