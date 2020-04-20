@@ -5,11 +5,11 @@ import { bind } from '../utils/bind'
 
 const cx = bind(styles)
 
-type Action = 'create' | 'complete'
+type Payload = {action: 'create', text: string} | {action: 'complete', id: number}
 
 export const App: React.FC = () => {
 
-  const reducer = (state: Todo[], payload: { action: Action, text?: string, id?: number }): Todo[] => {
+  const reducer = (state: Todo[], payload: Payload): Todo[] => {
     switch(payload.action) {
       case 'create': {
         const newTodo: Todo = { id: Math.floor(Math.random() * 1000), text: todoText, completed: false }
